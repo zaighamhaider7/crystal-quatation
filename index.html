@@ -2,958 +2,971 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crystal Clear Home Care - Quotation</title>
- 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-
-  <style>
-    :root {
-      --blue: #68a9e8;
-      --blue-dark: #438bd0;
-      --blue-soft: #eaf5ff;
-      --ink: #172033;
-      --muted: #65718a;
-      --line: #e0e7f2;
-      --bg: #f4f7fc;
-      --white: #fff;
-      --red: #c83c4d;
-      --shadow: 0 12px 35px #1c37640c
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Inter, Arial, Helvetica, sans-serif
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit
-    }
-
-    button {
-      cursor: pointer;
-      border: 0;
-      border-radius: 9px;
-      padding: 11px 15px;
-      font-weight: 750;
-      transition: background .15s, transform .15s
-    }
-
-    button:focus-visible,
-    input:focus-visible,
-    textarea:focus-visible,
-    select:focus-visible {
-      outline: 3px solid #c6e4ff;
-      outline-offset: 2px
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 25px;
-      background: #fff;
-      border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 10
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-size: 18px;
-      font-weight: 850;
-      letter-spacing: -.3px
-    }
-
-    .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      color: #fff;
-      background: linear-gradient(135deg, #8bc5f4, #5b9fe3);
-      font-size: 19px;
-      box-shadow: 0 5px 12px #68a9e833
-    }
-
-    .brand small {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0;
-      margin-top: 3px
-    }
-
-    .actions {
-      display: flex;
-      gap: 9px;
-      flex-wrap: wrap
-    }
-
-    .btn-primary {
-      background: var(--blue);
-      color: #fff;
-      box-shadow: 0 5px 12px #68a9e822
-    }
-
-    .btn-primary:hover {
-      background: var(--blue-dark)
-    }
-
-    .btn-light {
-      background: #fff;
-      color: #263550;
-      border: 1px solid var(--line)
-    }
-
-    .btn-light:hover {
-      background: #f6f8fc
-    }
-
-    .btn-blue-light {
-      background: var(--blue-soft);
-      color: var(--blue)
-    }
-
-    .btn-blue-light:hover {
-      background: #dfe9ff
-    }
-
-    .btn-remove {
-      background: #fff0f1;
-      color: var(--red);
-      padding: 8px 10px;
-      font-size: 17px
-    }
-
-    .container {
-      max-width: 1300px;
-      margin: 27px auto;
-      padding: 0 18px 45px
-    }
-
-    .hero {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 15px;
-      margin-bottom: 20px
-    }
-
-    .eyebrow {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      font-weight: 850;
-      color: var(--blue);
-      text-transform: uppercase;
-      margin-bottom: 7px
-    }
-
-    h1 {
-      font-size: 29px;
-      letter-spacing: -.8px;
-      margin: 0 0 7px
-    }
-
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5
-    }
-
-    .draft-pill {
-      border: 1px solid #cfe0ff;
-      background: #eaf5ff;
-      color: #438bd0;
-      border-radius: 30px;
-      padding: 8px 12px;
-      font-size: 11px;
-      font-weight: 800;
-      white-space: nowrap
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(390px, .95fr);
-      gap: 22px;
-      align-items: start
-    }
-
-    .form-panel,
-    .preview {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      box-shadow: var(--shadow);
-      overflow: hidden
-    }
-
-    .form-inner {
-      padding: 22px
-    }
-
-    .section {
-      padding-bottom: 23px;
-      margin-bottom: 23px;
-      border-bottom: 1px solid var(--line)
-    }
-
-    .section:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0;
-      border-bottom: 0
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 16px;
-      font-size: 15px;
-      font-weight: 850
-    }
-
-    .step {
-      width: 29px;
-      height: 29px;
-      display: grid;
-      place-items: center;
-      border-radius: 9px;
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-size: 12px
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 13px
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-width: 0
-    }
-
-    .field.full {
-      grid-column: 1/-1
-    }
-
-    label {
-      font-size: 12px;
-      font-weight: 750;
-      color: #46536b
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      border: 1px solid #d9e1ee;
-      background: #fff;
-      border-radius: 9px;
-      padding: 10px 11px;
-      font-size: 13px;
-      color: var(--ink);
-      min-width: 0
-    }
-
-    textarea {
-      min-height: 72px;
-      resize: vertical;
-      line-height: 1.45
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      outline: none;
-      border-color: #8bc5f4;
-      box-shadow: 0 0 0 3px #68a9e812
-    }
-
-    .help {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.5;
-      margin-top: 4px
-    }
-
-    .services-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 13px
-    }
-
-    .services-heading .section-heading {
-      margin: 0
-    }
-
-    .add-service {
-      font-size: 12px;
-      padding: 9px 11px
-    }
-
-    .service-card {
-      border: 1px solid #dfe6f2;
-      border-radius: 12px;
-      padding: 13px;
-      margin-bottom: 11px;
-      background: #fcfdff
-    }
-
-    .service-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 12px
-    }
-
-    .service-label {
-      font-size: 12px;
-      font-weight: 850;
-      color: #2b3a56
-    }
-
-    .service-fields {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 100px 100px;
-      gap: 10px
-    }
-
-    .service-fields .wide {
-      grid-column: 1/-1
-    }
-
-    .service-fields .field label {
-      font-size: 11px
-    }
-
-    .service-fields input,
-    .service-fields textarea {
-      padding: 9px;
-      font-size: 12px
-    }
-
-    .service-fields textarea {
-      min-height: 55px
-    }
-
-    .service-line-total {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px
-    }
-
-    .service-line-total strong {
-      font-size: 14px;
-      color: var(--blue)
-    }
-
-    .preview-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--line);
-      background: #fff
-    }
-
-    .preview-head strong {
-      font-size: 14px
-    }
-
-    .live-tag {
-      font-size: 10px;
-      color: #438bd0;
-      background: #eaf5ff;
-      border-radius: 30px;
-      padding: 6px 9px;
-      font-weight: 850;
-      letter-spacing: .4px
-    }
-
-    .preview-wrap {
-      position: sticky;
-      top: 91px
-    }
-
-    .paper {
-      padding: 27px 25px 24px
-    }
-
-    .doc-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding-bottom: 19px;
-      border-bottom: 3px solid var(--blue)
-    }
-
-    .doc-business {
-      font-size: 19px;
-      font-weight: 900;
-      letter-spacing: -.4px;
-      overflow-wrap: anywhere
-    }
-
-    .doc-business-info {
-      font-size: 10px;
-      line-height: 1.6;
-      color: var(--muted);
-      white-space: pre-line;
-      overflow-wrap: anywhere;
-      margin-top: 6px
-    }
-
-    .doc-title {
-      text-align: right;
-      font-size: 26px;
-      line-height: 1;
-      font-weight: 950;
-      letter-spacing: 1px;
-      color: var(--blue)
-    }
-
-    .doc-number {
-      font-size: 10px;
-      line-height: 1.8;
-      color: var(--muted);
-      text-align: right;
-      margin-top: 9px
-    }
-
-    .doc-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 19px 0 23px
-    }
-
-    .doc-label {
-      font-size: 9px;
-      letter-spacing: 1.1px;
-      font-weight: 900;
-      color: var(--blue);
-      margin-bottom: 8px
-    }
-
-    .doc-name {
-      font-size: 12px;
-      font-weight: 850;
-      white-space: pre-line;
-      overflow-wrap: anywhere
-    }
-
-    .doc-sub {
-      font-size: 10px;
-      color: var(--muted);
-      white-space: pre-line;
-      overflow-wrap: anywhere;
-      line-height: 1.6;
-      margin-top: 5px
-    }
-
-    .valid-box {
-      text-align: right;
-      min-width: 110px
-    }
-
-    .doc-intro {
-      font-size: 11px;
-      line-height: 1.6;
-      color: #536079;
-      margin: 0 0 17px
-    }
-
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto
-    }
-
-    .doc-table {
-      border-collapse: collapse;
-      width: 100%;
-      table-layout: fixed;
-      font-size: 10px;
-      margin-bottom: 17px
-    }
-
-    .doc-table th {
-      background: #edf3ff;
-      color: #438bd0;
-      text-align: left;
-      font-size: 9px;
-      font-weight: 850;
-      padding: 9px 6px
-    }
-
-    .doc-table td {
-      border-bottom: 1px solid #e9edf4;
-      padding: 10px 6px;
-      vertical-align: top;
-      overflow-wrap: anywhere
-    }
-
-    .doc-table th:nth-child(2),
-    .doc-table td:nth-child(2) {
-      width: 43px;
-      text-align: center
-    }
-
-    .doc-table th:nth-child(3),
-    .doc-table td:nth-child(3) {
-      width: 76px;
-      text-align: right
-    }
-
-    .doc-table th:nth-child(4),
-    .doc-table td:nth-child(4) {
-      width: 80px;
-      text-align: right
-    }
-
-    .item-name {
-      font-weight: 800;
-      color: #25334d;
-      font-size: 10px
-    }
-
-    .item-description {
-      font-size: 9px;
-      color: var(--muted);
-      line-height: 1.45;
-      margin-top: 4px;
-      white-space: pre-line
-    }
-
-    .doc-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 18px
-    }
-
-    .doc-notes {
-      max-width: 52%;
-      font-size: 10px;
-      color: var(--muted);
-      line-height: 1.65;
-      white-space: pre-line;
-      overflow-wrap: anywhere
-    }
-
-    .totals {
-      width: 48%;
-      font-size: 10px
-    }
-
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 5px 0;
-      color: #58647a
-    }
-
-    .total-row span:last-child {
-      white-space: nowrap
-    }
-
-    .total-row.grand {
-      border-top: 1px solid #dbe4f4;
-      margin-top: 5px;
-      padding-top: 11px;
-      color: var(--blue);
-      font-size: 14px;
-      font-weight: 950
-    }
-
-    .disclaimer {
-      margin-top: 18px;
-      padding: 11px 12px;
-      border-radius: 9px;
-      background: #f3f7ff;
-      color: #51617e;
-      font-size: 9px;
-      line-height: 1.6
-    }
-
-    .doc-footer {
-      text-align: center;
-      border-top: 1px solid var(--line);
-      margin-top: 21px;
-      padding-top: 14px;
-      color: var(--muted);
-      font-size: 10px
-    }
-
-    .status {
-      font-size: 12px;
-      color: var(--muted);
-      padding: 0 22px 18px;
-      min-height: 18px
-    }
-
-    .footer {
-      text-align: center;
-      color: #98a3b8;
-      font-size: 11px;
-      margin-top: 18px
-    }
-
-    @media(max-width:980px) {
-      .layout {
-        grid-template-columns: 1fr
-      }
-
-      .preview-wrap {
-        position: static
-      }
-
-      .preview {
-        max-width: 100%
-      }
-    }
-
-    @media(max-width:570px) {
-      .topbar {
-        position: static;
-        padding: 13px 14px;
-        align-items: flex-start;
-        flex-direction: column
-      }
-
-      .actions {
-        width: 100%
-      }
-
-      .actions button {
-        flex: 1
-      }
-
-      .container {
-        margin: 20px auto;
-        padding: 0 10px 30px
-      }
-
-      .hero {
-        align-items: flex-start;
-        flex-direction: column
-      }
-
-      .hero h1 {
-        font-size: 25px
-      }
-
-      .form-inner {
-        padding: 15px
-      }
-
-      .grid {
-        grid-template-columns: 1fr
-      }
-
-      .field.full {
-        grid-column: auto
-      }
-
-      .service-fields {
-        grid-template-columns: minmax(0, 1fr) 76px 84px;
-        gap: 7px
-      }
-
-      .service-card {
-        padding: 9px
-      }
-
-      .service-fields input,
-      .service-fields textarea {
-        padding: 8px 6px;
-        font-size: 11px
-      }
-
-      .paper {
-        padding: 19px 13px
-      }
-
-      .doc-business {
-        font-size: 16px
-      }
-
-      .doc-title {
-        font-size: 21px
-      }
-
-      .doc-table th:nth-child(3),
-      .doc-table td:nth-child(3) {
-        width: 65px
-      }
-
-      .doc-table th:nth-child(4),
-      .doc-table td:nth-child(4) {
-        width: 68px
-      }
-
-      .doc-meta {
-        gap: 8px
-      }
-
-      .doc-bottom {
-        gap: 10px
-      }
-    }
-
-    @media print {
-      body {
-        background: #fff
-      }
-
-      .topbar,
-      .hero,
-      .form-panel,
-      .preview-head,
-      .footer,
-      .status {
-        display: none !important
-      }
-
-      .container {
-        margin: 0;
-        padding: 0;
-        max-width: none
-      }
-
-      .layout {
-        display: block
-      }
-
-      .preview-wrap {
-        position: static
-      }
-
-      .preview {
-        border: 0;
-        box-shadow: none;
-        border-radius: 0
-      }
-
-      .paper {
-        padding: 8mm
-      }
-
-      .doc-business {
-        font-size: 22px
-      }
-
-      .doc-title {
-        font-size: 30px
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Clear Home Care - Quotation</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        :root {
+            --blue: #68a9e8;
+            --blue-dark: #438bd0;
+            --blue-soft: #eaf5ff;
+            --ink: #172033;
+            --muted: #65718a;
+            --line: #e0e7f2;
+            --bg: #f4f7fc;
+            --white: #fff;
+            --red: #c83c4d;
+            --shadow: 0 12px 35px #1c37640c
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: Inter, Arial, Helvetica, sans-serif
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer;
+            border: 0;
+            border-radius: 9px;
+            padding: 11px 15px;
+            font-weight: 750;
+            transition: background .15s, transform .15s
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #c6e4ff;
+            outline-offset: 2px
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 25px;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 10
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 18px;
+            font-weight: 850;
+            letter-spacing: -.3px
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: linear-gradient(135deg, #8bc5f4, #5b9fe3);
+            font-size: 19px;
+            box-shadow: 0 5px 12px #68a9e833
+        }
+
+        .brand small {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0;
+            margin-top: 3px
+        }
+
+        .actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: #fff;
+            box-shadow: 0 5px 12px #68a9e822
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-dark)
+        }
+
+        .btn-light {
+            background: #fff;
+            color: #263550;
+            border: 1px solid var(--line)
+        }
+
+        .btn-light:hover {
+            background: #f6f8fc
+        }
+
+        .btn-blue-light {
+            background: var(--blue-soft);
+            color: var(--blue)
+        }
+
+        .btn-blue-light:hover {
+            background: #dfe9ff
+        }
+
+        .btn-remove {
+            background: #fff0f1;
+            color: var(--red);
+            padding: 8px 10px;
+            font-size: 17px
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 27px auto;
+            padding: 0 18px 45px
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 20px
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            font-weight: 850;
+            color: var(--blue);
+            text-transform: uppercase;
+            margin-bottom: 7px
+        }
+
+        h1 {
+            font-size: 29px;
+            letter-spacing: -.8px;
+            margin: 0 0 7px
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        .draft-pill {
+            border: 1px solid #cfe0ff;
+            background: #eaf5ff;
+            color: #438bd0;
+            border-radius: 30px;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(390px, .95fr);
+            gap: 22px;
+            align-items: start
+        }
+
+        .form-panel,
+        .preview {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            box-shadow: var(--shadow);
+            overflow: hidden
+        }
+
+        .form-inner {
+            padding: 22px
+        }
+
+        .section {
+            padding-bottom: 23px;
+            margin-bottom: 23px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .section:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: 0
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 16px;
+            font-size: 15px;
+            font-weight: 850
+        }
+
+        .step {
+            width: 29px;
+            height: 29px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-size: 12px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0
+        }
+
+        .field.full {
+            grid-column: 1/-1
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 750;
+            color: #46536b
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #d9e1ee;
+            background: #fff;
+            border-radius: 9px;
+            padding: 10px 11px;
+            font-size: 13px;
+            color: var(--ink);
+            min-width: 0
+        }
+
+        textarea {
+            min-height: 72px;
+            resize: vertical;
+            line-height: 1.45
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #8bc5f4;
+            box-shadow: 0 0 0 3px #68a9e812
+        }
+
+        .help {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.5;
+            margin-top: 4px
+        }
+
+        .services-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 13px
+        }
+
+        .services-heading .section-heading {
+            margin: 0
+        }
+
+        .add-service {
+            font-size: 12px;
+            padding: 9px 11px
+        }
+
+        .service-card {
+            border: 1px solid #dfe6f2;
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 11px;
+            background: #fcfdff
+        }
+
+        .service-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px
+        }
+
+        .service-label {
+            font-size: 12px;
+            font-weight: 850;
+            color: #2b3a56
+        }
+
+        .service-fields {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 100px 100px;
+            gap: 10px
+        }
+
+        .service-fields .wide {
+            grid-column: 1/-1
+        }
+
+        .service-fields .field label {
+            font-size: 11px
+        }
+
+        .service-fields input,
+        .service-fields textarea {
+            padding: 9px;
+            font-size: 12px
+        }
+
+        .service-fields textarea {
+            min-height: 55px
+        }
+
+        .service-line-total {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 10px
+        }
+
+        .service-line-total strong {
+            font-size: 14px;
+            color: var(--blue)
+        }
+
+        .preview-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--line);
+            background: #fff
+        }
+
+        .preview-head strong {
+            font-size: 14px
+        }
+
+        .live-tag {
+            font-size: 10px;
+            color: #438bd0;
+            background: #eaf5ff;
+            border-radius: 30px;
+            padding: 6px 9px;
+            font-weight: 850;
+            letter-spacing: .4px
+        }
+
+        .preview-wrap {
+            position: sticky;
+            top: 91px
+        }
+
+        .paper {
+            padding: 27px 25px 24px
+        }
+
+        .doc-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding-bottom: 19px;
+            border-bottom: 3px solid var(--blue)
+        }
+
+        .doc-business {
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: -.4px;
+            overflow-wrap: anywhere
+        }
+
+        .doc-business-info {
+            font-size: 10px;
+            line-height: 1.6;
+            color: var(--muted);
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+            margin-top: 6px
+        }
+
+        .doc-title {
+            text-align: right;
+            font-size: 26px;
+            line-height: 1;
+            font-weight: 950;
+            letter-spacing: 1px;
+            color: var(--blue)
+        }
+
+        .doc-number {
+            font-size: 10px;
+            line-height: 1.8;
+            color: var(--muted);
+            text-align: right;
+            margin-top: 9px
+        }
+
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 19px 0 23px
+        }
+
+        .doc-label {
+            font-size: 9px;
+            letter-spacing: 1.1px;
+            font-weight: 900;
+            color: var(--blue);
+            margin-bottom: 8px
+        }
+
+        .doc-name {
+            font-size: 12px;
+            font-weight: 850;
+            white-space: pre-line;
+            overflow-wrap: anywhere
+        }
+
+        .doc-sub {
+            font-size: 10px;
+            color: var(--muted);
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+            margin-top: 5px
+        }
+
+        .valid-box {
+            text-align: right;
+            min-width: 110px
+        }
+
+        .doc-intro {
+            font-size: 11px;
+            line-height: 1.6;
+            color: #536079;
+            margin: 0 0 17px
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto
+        }
+
+        .doc-table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+            font-size: 10px;
+            margin-bottom: 17px
+        }
+
+        .doc-table th {
+            background: #edf3ff;
+            color: #438bd0;
+            text-align: left;
+            font-size: 9px;
+            font-weight: 850;
+            padding: 9px 6px
+        }
+
+        .doc-table td {
+            border-bottom: 1px solid #e9edf4;
+            padding: 10px 6px;
+            vertical-align: top;
+            overflow-wrap: anywhere
+        }
+
+        .doc-table th:nth-child(2),
+        .doc-table td:nth-child(2) {
+            width: 43px;
+            text-align: center
+        }
+
+        .doc-table th:nth-child(3),
+        .doc-table td:nth-child(3) {
+            width: 76px;
+            text-align: right
+        }
+
+        .doc-table th:nth-child(4),
+        .doc-table td:nth-child(4) {
+            width: 80px;
+            text-align: right
+        }
+
+        .item-name {
+            font-weight: 800;
+            color: #25334d;
+            font-size: 10px
+        }
+
+        .item-description {
+            font-size: 9px;
+            color: var(--muted);
+            line-height: 1.45;
+            margin-top: 4px;
+            white-space: pre-line
+        }
+
+        .doc-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px
+        }
+
+        .doc-notes {
+            max-width: 52%;
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.65;
+            white-space: pre-line;
+            overflow-wrap: anywhere
+        }
+
+        .totals {
+            width: 48%;
+            font-size: 10px
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 5px 0;
+            color: #58647a
+        }
+
+        .total-row span:last-child {
+            white-space: nowrap
+        }
+
+        .total-row.grand {
+            border-top: 1px solid #dbe4f4;
+            margin-top: 5px;
+            padding-top: 11px;
+            color: var(--blue);
+            font-size: 14px;
+            font-weight: 950
+        }
+
+        .disclaimer {
+            margin-top: 18px;
+            padding: 11px 12px;
+            border-radius: 9px;
+            background: #f3f7ff;
+            color: #51617e;
+            font-size: 9px;
+            line-height: 1.6
+        }
+
+        .doc-footer {
+            text-align: center;
+            border-top: 1px solid var(--line);
+            margin-top: 21px;
+            padding-top: 14px;
+            color: var(--muted);
+            font-size: 10px
+        }
+
+        .status {
+            font-size: 12px;
+            color: var(--muted);
+            padding: 0 22px 18px;
+            min-height: 18px
+        }
+
+        .footer {
+            text-align: center;
+            color: #98a3b8;
+            font-size: 11px;
+            margin-top: 18px
+        }
+
+        @media(max-width:980px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
+
+            .preview-wrap {
+                position: static
+            }
+
+            .preview {
+                max-width: 100%
+            }
+        }
+
+        @media(max-width:570px) {
+            .topbar {
+                position: static;
+                padding: 13px 14px;
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .actions {
+                width: 100%
+            }
+
+            .actions button {
+                flex: 1
+            }
+
+            .container {
+                margin: 20px auto;
+                padding: 0 10px 30px
+            }
+
+            .hero {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .hero h1 {
+                font-size: 25px
+            }
+
+            .form-inner {
+                padding: 15px
+            }
+
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .field.full {
+                grid-column: auto
+            }
+
+            .service-fields {
+                grid-template-columns: minmax(0, 1fr) 76px 84px;
+                gap: 7px
+            }
+
+            .service-card {
+                padding: 9px
+            }
+
+            .service-fields input,
+            .service-fields textarea {
+                padding: 8px 6px;
+                font-size: 11px
+            }
+
+            .paper {
+                padding: 19px 13px
+            }
+
+            .doc-business {
+                font-size: 16px
+            }
+
+            .doc-title {
+                font-size: 21px
+            }
+
+            .doc-table th:nth-child(3),
+            .doc-table td:nth-child(3) {
+                width: 65px
+            }
+
+            .doc-table th:nth-child(4),
+            .doc-table td:nth-child(4) {
+                width: 68px
+            }
+
+            .doc-meta {
+                gap: 8px
+            }
+
+            .doc-bottom {
+                gap: 10px
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff
+            }
+
+            .topbar,
+            .hero,
+            .form-panel,
+            .preview-head,
+            .footer,
+            .status {
+                display: none !important
+            }
+
+            .container {
+                margin: 0;
+                padding: 0;
+                max-width: none
+            }
+
+            .layout {
+                display: block
+            }
+
+            .preview-wrap {
+                position: static
+            }
+
+            .preview {
+                border: 0;
+                box-shadow: none;
+                border-radius: 0
+            }
+
+            .paper {
+                padding: 8mm
+            }
+
+            .doc-business {
+                font-size: 22px
+            }
+
+            .doc-title {
+                font-size: 30px
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">✦</div>
-      <div>Cleaning Quotation<small>Quotation builder</small></div>
-    </div>
-    <div class="actions">
-      <button class="btn-light" id="printBtn" type="button">Print quotation</button>
-      <button class="btn-primary" id="pdfBtn" type="button">↓ Download PDF</button>
-    </div>
-  </header>
-  <main class="container">
-    <div class="hero">
-      <div>
-        <div class="eyebrow">Client proposal</div>
-        <h1>Create a cleaning quotation</h1>
-        <p>Prepare a clear service estimate for homes, apartments, and other spaces.</p>
-      </div>
-      <div class="draft-pill">● LIVE PREVIEW</div>
-    </div>
-    <div class="layout">
-      <section class="form-panel" aria-label="Quotation details form">
-        <div class="form-inner">
-          <section class="section">
-            <h2 class="section-heading"><span class="step">01</span> Business & quotation</h2>
-            <div class="grid">
-              <div class="field"><label for="businessName">Business name *</label><input id="businessName" required
-                  value="" placeholder="Cleaning business name"></div>
-              <div class="field"><label for="businessPhone">Business phone *</label><input id="businessPhone" required
-                  placeholder="+92 300 1234567"></div>
-              <div class="field full"><label for="businessAddress">Business address</label><textarea
-                  id="businessAddress" placeholder="Business address"></textarea></div>
-              <div class="field"><label for="businessEmail">Business email</label><input id="businessEmail" type="email"
-                  placeholder="hello@bluenest.com"></div>
-              <div class="field"><label for="website">Website (optional)</label><input id="website"
-                  placeholder="www.example.com"></div>
-              <div class="field"><label for="quoteNo">Quotation number</label><input id="quoteNo" value="QT-1001"></div>
-              <div class="field"><label for="quoteDate">Quotation date</label><input id="quoteDate" type="date"></div>
-              <div class="field"><label for="validUntil">Valid until</label><input id="validUntil" type="date"></div>
-              <div class="field"><label>Currency</label><input value="PKR — Pakistani Rupee" readonly></div>
+    <header class="topbar">
+        <div class="brand">
+            <!-- <div class="logo">✦</div> -->
+            <div>Crystal Quotation<small>Quotation builder</small></div>
+        </div>
+        <div class="actions">
+            <button class="btn-light" id="printBtn" type="button">Print quotation</button>
+            <button class="btn-primary" id="pdfBtn" type="button">↓ Download PDF</button>
+        </div>
+    </header>
+    <main class="container">
+        <div class="hero">
+            <div>
+                <div class="eyebrow">Client proposal</div>
+                <h1>Create a Quotation</h1>
+                <p>Prepare a clear service estimate for homes, apartments, and other spaces.</p>
             </div>
-          </section>
-          <section class="section">
-            <h2 class="section-heading"><span class="step">02</span> Customer & property</h2>
-            <div class="grid">
-              <div class="field"><label for="customerName">Customer name *</label><input id="customerName" required
-                  placeholder="Customer full name"></div>
-              <div class="field"><label for="customerPhone">Customer phone</label><input id="customerPhone"
-                  placeholder="+92 300 1234567"></div>
-              <div class="field"><label for="customerEmail">Customer email</label><input id="customerEmail" type="email"
-                  placeholder="customer@example.com"></div>
-              <div class="field"><label for="propertyType">Property type</label><select id="propertyType">
-                  <option value="">Select property type (optional)</option>
-                  <option>House</option>
-                  <option>Apartment</option>
-                  <option>Villa</option>
-                  <option>Office</option>
-                  <option>Commercial space</option>
-                  <option>Other</option>
-                </select></div>
-              <div class="field full"><label for="propertyAddress">Cleaning location / property address
-                  (optional)</label><textarea id="propertyAddress"
-                  placeholder="Full address where cleaning will take place"></textarea></div>
-              <div class="field"><label for="propertySize">Approx. property size</label><input id="propertySize"
-                  placeholder="e.g. 2,000 sq ft or 185 m²"></div>
-              <div class="field"><label for="bedrooms">Bedrooms / rooms</label><input id="bedrooms"
-                  placeholder="e.g. 3 bedrooms, 2 bathrooms"></div>
-            </div>
-          </section>
-          <section class="section">
-            <div class="services-heading">
-              <h2 class="section-heading"><span class="step">03</span> Cleaning services</h2>
-              <button class="btn-blue-light add-service" id="addServiceBtn" type="button">+ Add service</button>
-            </div>
-            <div id="servicesContainer"></div>
-            <div class="help">Add each service separately. Include its description, area/size, quantity and price. Line
-              totals and quotation total update automatically.</div>
-          </section>
+            <div class="draft-pill">● LIVE PREVIEW</div>
+        </div>
+        <div class="layout">
+            <section class="form-panel" aria-label="Quotation details form">
+                <div class="form-inner">
+                    <section class="section">
+                        <h2 class="section-heading"><span class="step">01</span> Business & quotation</h2>
+                        <div class="grid">
+                            <div class="field"><label for="businessName">Business name *</label><input id="businessName"
+                                    required value="" placeholder="Cleaning business name"></div>
+                            <div class="field">
+                                <label for="businessPhone">Business phone *</label>
+                                <input
+                                    id="businessPhone" required placeholder="+92 300 1234567">
+                                </div>
+                            <div class="field full"><label for="businessAddress">Business address</label><textarea
+                                    id="businessAddress" placeholder="Business address"></textarea></div>
+                            <div class="field"><label for="businessEmail">Business email</label><input
+                                    id="businessEmail" type="email" placeholder="hello@bluenest.com"></div>
+                            <div class="field"><label for="website">Website (optional)</label><input id="website"
+                                    placeholder="www.example.com"></div>
+                            <div class="field"><label for="quoteNo">Quotation number *</label>
+                                <input id="quoteNo" required
+                                   placeholder="e.g. 101" >
+                                </div>
+                            <div class="field"><label for="quoteDate">Quotation date</label><input id="quoteDate"
+                                    type="date"></div>
+                            <div class="field"><label for="validUntil">Valid until</label><input id="validUntil"
+                                    type="date"></div>
+                            <div class="field"><label>Currency</label><input value="PKR — Pakistani Rupee" readonly>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section">
+                        <h2 class="section-heading"><span class="step">02</span> Customer & property</h2>
+                        <div class="grid">
+                            <div class="field"><label for="customerName">Customer name *</label><input id="customerName"
+                                    required placeholder="Customer full name"></div>
+                            <div class="field"><label for="customerPhone">Customer phone</label><input
+                                    id="customerPhone" placeholder="+92 300 1234567"></div>
+                            <div class="field"><label for="customerEmail">Customer email</label><input
+                                    id="customerEmail" type="email" placeholder="customer@example.com"></div>
+                            <div class="field"><label for="propertyType">Property type</label><select id="propertyType">
+                                    <option value="">Select property type (optional)</option>
+                                    <option>House</option>
+                                    <option>Apartment</option>
+                                    <option>Villa</option>
+                                    <option>Office</option>
+                                    <option>Commercial space</option>
+                                    <option>Other</option>
+                                </select></div>
+                            <div class="field full"><label for="propertyAddress">Cleaning location / property address
+                                    (optional)</label><textarea id="propertyAddress"
+                                    placeholder="Full address where cleaning will take place"></textarea></div>
+                            <div class="field"><label for="propertySize">Approx. property size</label><input
+                                    id="propertySize" placeholder="e.g. 2,000 sq ft or 185 m²"></div>
+                            <div class="field"><label for="bedrooms">Bedrooms / rooms</label><input id="bedrooms"
+                                    placeholder="e.g. 3 bedrooms, 2 bathrooms"></div>
+                        </div>
+                    </section>
+                    <section class="section">
+                        <div class="services-heading">
+                            <h2 class="section-heading"><span class="step">03</span> Cleaning services</h2>
+                            <button class="btn-blue-light add-service" id="addServiceBtn" type="button">+ Add
+                                service</button>
+                        </div>
+                        <div id="servicesContainer"></div>
+                        <div class="help">Add each service separately. Include its description, area/size, quantity and
+                            price. Line
+                            totals and quotation total update automatically.</div>
+                    </section>
 
-          <section class="section">
-            <h2 class="section-heading"><span class="step">04</span> Terms & notes</h2>
-            <div class="grid">
-              <div class="field full"><label for="terms">Terms & conditions</label><textarea id="terms"
-                  placeholder="e.g. Final price may change if the scope or property condition differs from the details provided. Work begins after customer approval.">This quotation is an estimate based on the property and services described above. Any changes to the scope of work may affect the final price. Work will be scheduled after quotation approval.</textarea>
-              </div>
-              <div class="field full"><label for="notes">Additional notes</label><textarea id="notes"
-                  placeholder="Any extra details for the customer"></textarea></div>
-            </div>
-          </section>
+                    <section class="section">
+                        <h2 class="section-heading"><span class="step">04</span> Terms & notes</h2>
+                        <div class="grid">
+                            <div class="field full"><label for="terms">Terms & conditions</label><textarea id="terms"
+                                    placeholder="e.g. Final price may change if the scope or property condition differs from the details provided. Work begins after customer approval.">This quotation is an estimate based on the property and services described above. Any changes to the scope of work may affect the final price. Work will be scheduled after quotation approval.</textarea>
+                            </div>
+                            <div class="field full"><label for="notes">Additional notes</label><textarea id="notes"
+                                    placeholder="Any extra details for the customer"></textarea></div>
+                        </div>
+                    </section>
+                </div>
+                <div class="status" id="status" role="status" aria-live="polite"></div>
+            </section>
+            <section class="preview-wrap">
+                <div class="preview">
+                    <div class="preview-head"><strong>Quotation preview</strong><span class="live-tag">UPDATING
+                            LIVE</span></div>
+                    <div class="paper" id="quotationPaper">
+                        <div class="doc-top">
+                            <div>
+                                <div class="doc-business" id="pBusiness">Your Business Name</div>
+                                <div class="doc-business-info" id="pBusinessInfo"></div>
+                            </div>
+                            <div>
+                                <div class="doc-title">QUOTATION</div>
+                                <div class="doc-number" id="pQuoteMeta"></div>
+                            </div>
+                        </div>
+                        <div class="doc-meta">
+                            <div>
+                                <div class="doc-label">PREPARED FOR</div>
+                                <div class="doc-name" id="pCustomer">Customer name</div>
+                                <div class="doc-sub" id="pCustomerInfo"></div>
+                            </div>
+                            <div class="valid-box">
+                                <div class="doc-label">VALID UNTIL</div>
+                                <div class="doc-name" id="pValid">—</div>
+                                <div class="doc-sub" id="pPropertyMeta"></div>
+                            </div>
+                        </div>
+                        <p class="doc-intro">Thank you for considering our cleaning services. Please find the proposed
+                            scope of work
+                            and pricing below.</p>
+                        <div class="table-wrap">
+                            <table class="doc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Service & details</th>
+                                        <th>Qty</th>
+                                        <th>Unit price</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pServices"></tbody>
+                            </table>
+                        </div>
+                        <div class="doc-bottom">
+                            <div class="doc-notes" id="pScope"></div>
+                            <div class="totals">
+                                <div class="total-row grand"><span>Total</span><span id="pTotal">PKR 0.00</span></div>
+                            </div>
+                        </div>
+                        <div class="disclaimer" id="pTerms"></div>
+                        <div class="doc-footer" id="pFooter">We look forward to helping you enjoy a cleaner space.</div>
+                    </div>
+                </div>
+                <div class="footer">Quotation builder · PDF generated in your browser</div>
+            </section>
         </div>
-        <div class="status" id="status" role="status" aria-live="polite"></div>
-      </section>
-      <section class="preview-wrap">
-        <div class="preview">
-          <div class="preview-head"><strong>Quotation preview</strong><span class="live-tag">UPDATING LIVE</span></div>
-          <div class="paper" id="quotationPaper">
-            <div class="doc-top">
-              <div>
-                <div class="doc-business" id="pBusiness">Your Business Name</div>
-                <div class="doc-business-info" id="pBusinessInfo"></div>
-              </div>
-              <div>
-                <div class="doc-title">QUOTATION</div>
-                <div class="doc-number" id="pQuoteMeta"></div>
-              </div>
-            </div>
-            <div class="doc-meta">
-              <div>
-                <div class="doc-label">PREPARED FOR</div>
-                <div class="doc-name" id="pCustomer">Customer name</div>
-                <div class="doc-sub" id="pCustomerInfo"></div>
-              </div>
-              <div class="valid-box">
-                <div class="doc-label">VALID UNTIL</div>
-                <div class="doc-name" id="pValid">—</div>
-                <div class="doc-sub" id="pPropertyMeta"></div>
-              </div>
-            </div>
-            <p class="doc-intro">Thank you for considering our cleaning services. Please find the proposed scope of work
-              and pricing below.</p>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr>
-                    <th>Service & details</th>
-                    <th>Qty</th>
-                    <th>Unit price</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-                <tbody id="pServices"></tbody>
-              </table>
-            </div>
-            <div class="doc-bottom">
-              <div class="doc-notes" id="pScope"></div>
-              <div class="totals">
-                <div class="total-row grand"><span>Total</span><span id="pTotal">PKR 0.00</span></div>
-              </div>
-            </div>
-            <div class="disclaimer" id="pTerms"></div>
-            <div class="doc-footer" id="pFooter">We look forward to helping you enjoy a cleaner space.</div>
-          </div>
-        </div>
-        <div class="footer">Quotation builder · PDF generated in your browser</div>
-      </section>
-    </div>
-  </main>
-  <script>
-    (() => {
-      const $ = id => document.getElementById(id);
-      const today = new Date();
-      const toLocalDate = date => new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-      $('quoteDate').value = toLocalDate(today);
-      const validity = new Date(today); validity.setDate(validity.getDate() + 14);
-      $('validUntil').value = toLocalDate(validity);
-      const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-      const num = id => {const n = Number($(id).value); return Number.isFinite(n) ? Math.max(0, n) : 0;};
-      const money = value => {
-        const n = Number.isFinite(value) ? value : 0;
-        const formatted = new Intl.NumberFormat('en-PK', {minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2}).format(n);
-        return `Rs. ${formatted}/-`;
-      };
-      const dateFmt = value => {
-        if (!value) return '—';
-        const date = new Date(value + 'T00:00:00');
-        return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'});
-      };
-      let serviceCount = 0;
-      function addService(data = {}) {
-        const id = ++serviceCount;
-        const card = document.createElement('div');
-        card.className = 'service-card';
-        card.dataset.serviceId = id;
-        card.innerHTML = `
+    </main>
+    <script>
+        (() => {
+            const $ = id => document.getElementById(id);
+            const today = new Date();
+            const toLocalDate = date => new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+            $('quoteDate').value = toLocalDate(today);
+            const validity = new Date(today); validity.setDate(validity.getDate() + 14);
+            $('validUntil').value = toLocalDate(validity);
+            const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const num = id => { const n = Number($(id).value); return Number.isFinite(n) ? Math.max(0, n) : 0; };
+            const money = value => {
+                const n = Number.isFinite(value) ? value : 0;
+                const formatted = new Intl.NumberFormat('en-PK', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 }).format(n);
+                return `Rs. ${formatted}/-`;
+            };
+            const dateFmt = value => {
+                if (!value) return '—';
+                const date = new Date(value + 'T00:00:00');
+                return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            };
+            let serviceCount = 0;
+            function addService(data = {}) {
+                const id = ++serviceCount;
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.dataset.serviceId = id;
+                card.innerHTML = `
       <div class="service-top"><span class="service-label">Service ${id}</span><button type="button" class="btn-remove remove-service" aria-label="Remove service" title="Remove service">×</button></div>
       <div class="service-fields">
         <div class="field wide"><label>Service name *</label><input class="s-name" required aria-label="Service name" placeholder="e.g. Deep house cleaning" value="${escapeHtml(data.name || '')}"></div>
@@ -964,202 +977,204 @@
         <div class="field"><label>Unit price *</label><input class="s-price" required aria-label="Unit price" type="number" min="0" step="any" value="${data.price ?? ''}"></div>
       </div>
       <div class="service-line-total">Line total: <strong>${money(0)}</strong></div>`;
-        $('servicesContainer').appendChild(card);
-        card.querySelectorAll('input,textarea,select').forEach(el => {
-          el.addEventListener('input', updatePreview);
-          el.addEventListener('change', updatePreview);
-        });
-        card.querySelector('.remove-service').addEventListener('click', () => {
-          card.remove();
-          renumberServices();
-          if (!$('servicesContainer').children.length) addService();
-          updatePreview();
-        });
-        renumberServices();
-        updatePreview();
-      }
-      function renumberServices() {
-        [...$('servicesContainer').querySelectorAll('.service-card')].forEach((card, index) => {
-          card.querySelector('.service-label').textContent = `Service ${index + 1}`;
-        });
-      }
-      function collect() {
-        const services = [...$('servicesContainer').querySelectorAll('.service-card')].map(card => {
-          const val = selector => card.querySelector(selector).value;
-          const qty = Math.max(0, Number(val('.s-qty')) || 0);
-          const price = Math.max(0, Number(val('.s-price')) || 0);
-          return {name: val('.s-name').trim(), description: val('.s-description').trim(), area: val('.s-area').trim(), qty, unit: val('.s-unit'), price, total: qty * price, card};
-        });
-        const subtotal = services.reduce((sum, service) => sum + service.total, 0);
-        return {
-          businessName: $('businessName').value.trim() || 'Cleaning Business',
-          businessPhone: $('businessPhone').value.trim(),
-          businessAddress: $('businessAddress').value.trim(),
-          businessEmail: $('businessEmail').value.trim(),
-          website: $('website').value.trim(),
-          quoteNo: $('quoteNo').value.trim() || '—',
-          quoteDate: $('quoteDate').value,
-          validUntil: $('validUntil').value,
-          customerName: $('customerName').value.trim() || 'Customer name',
-          customerPhone: $('customerPhone').value.trim(),
-          customerEmail: $('customerEmail').value.trim(),
-          propertyType: $('propertyType').value,
-          propertyAddress: $('propertyAddress').value.trim(),
-          propertySize: $('propertySize').value.trim(),
-          bedrooms: $('bedrooms').value.trim(),
-          services, subtotal, total: subtotal,
-          terms: $('terms').value.trim(),
-          notes: $('notes').value.trim()
-        };
-      }
-      function updatePreview() {
-        const d = collect();
-        $('pBusiness').textContent = d.businessName;
-        $('pBusinessInfo').textContent = [d.businessAddress, d.businessPhone, d.businessEmail, d.website].filter(Boolean).join('\n');
-        $('pQuoteMeta').textContent = `Quote #: ${d.quoteNo}\nDate: ${dateFmt(d.quoteDate)}`;
-        $('pCustomer').textContent = d.customerName;
-        $('pCustomerInfo').textContent = [d.customerPhone, d.customerEmail, d.propertyAddress].filter(Boolean).join('\n');
-        $('pValid').textContent = dateFmt(d.validUntil);
-        $('pPropertyMeta').textContent = [d.propertyType, d.propertySize, d.bedrooms].filter(Boolean).join('\n');
-        $('pServices').innerHTML = d.services.map(s => {
-          s.card.querySelector('.service-line-total strong').textContent = money(s.total);
-          const detail = [s.description, s.area ? `Area: ${s.area}` : ''].filter(Boolean).join('\n');
-          return `<tr><td><div class="item-name">${escapeHtml(s.name || 'Cleaning service')}</div>${detail ? `<div class="item-description">${escapeHtml(detail)}</div>` : ''}</td><td>${s.qty} ${escapeHtml(s.unit)}</td><td>${money(s.price)}</td><td>${money(s.total)}</td></tr>`;
-        }).join('');
-        $('pTotal').textContent = money(d.total);
-        const scope = [];
-        if (d.notes) scope.push('NOTES\n' + d.notes);
-        $('pScope').textContent = scope.join('\n\n');
-        $('pTerms').textContent = d.terms || 'This quotation is an estimate. Final pricing may vary if the agreed scope or property condition changes. Work is scheduled after customer approval.';
-        $('pFooter').textContent = d.businessPhone ? `Questions? Contact ${d.businessName} · ${d.businessPhone}` : 'We look forward to helping you enjoy a cleaner space.';
-      }
-      function addPdfParagraph(doc, text, x, y, width, lineHeight = 4.5) {
-        if (!text) return y;
-        const lines = doc.splitTextToSize(String(text), width);
-        doc.text(lines, x, y);
-        return y + lines.length * lineHeight;
-      }
-      function validateQuotation() {
-        const d = collect();
-        const cards = [...$('servicesContainer').querySelectorAll('.service-card')];
-        const missing = [];
-        if (!d.businessName || d.businessName === 'Cleaning Business') missing.push('Business name');
-        if (!d.businessPhone) missing.push('Business phone');
-        if (!d.customerName || d.customerName === 'Customer name') missing.push('Customer name');
-        if (!cards.length) missing.push('At least one service');
-        cards.forEach((card, index) => {
-          if (!card.querySelector('.s-name').value.trim()) missing.push(`Service ${index + 1} name`);
-          if (card.querySelector('.s-price').value.trim() === '') missing.push(`Service ${index + 1} rate`);
-        });
-        if (missing.length) {
-          $('status').textContent = 'Please complete required fields: ' + missing.join(', ') + '.';
-          if (!d.businessName || d.businessName === 'Cleaning Business') $('businessName').focus();
-          else if (!d.businessPhone) $('businessPhone').focus();
-          else if (!d.customerName || d.customerName === 'Customer name') $('customerName').focus();
-          else {
-            const first = cards.find(card => !card.querySelector('.s-name').value.trim() || card.querySelector('.s-price').value.trim() === '');
-            if (first) first.querySelector(!first.querySelector('.s-name').value.trim() ? '.s-name' : '.s-price').focus();
-          }
-          return false;
-        }
-        return true;
-      }
+                $('servicesContainer').appendChild(card);
+                card.querySelectorAll('input,textarea,select').forEach(el => {
+                    el.addEventListener('input', updatePreview);
+                    el.addEventListener('change', updatePreview);
+                });
+                card.querySelector('.remove-service').addEventListener('click', () => {
+                    card.remove();
+                    renumberServices();
+                    if (!$('servicesContainer').children.length) addService();
+                    updatePreview();
+                });
+                renumberServices();
+                updatePreview();
+            }
+            function renumberServices() {
+                [...$('servicesContainer').querySelectorAll('.service-card')].forEach((card, index) => {
+                    card.querySelector('.service-label').textContent = `Service ${index + 1}`;
+                });
+            }
+            function collect() {
+                const services = [...$('servicesContainer').querySelectorAll('.service-card')].map(card => {
+                    const val = selector => card.querySelector(selector).value;
+                    const qty = Math.max(0, Number(val('.s-qty')) || 0);
+                    const price = Math.max(0, Number(val('.s-price')) || 0);
+                    return { name: val('.s-name').trim(), description: val('.s-description').trim(), area: val('.s-area').trim(), qty, unit: val('.s-unit'), price, total: qty * price, card };
+                });
+                const subtotal = services.reduce((sum, service) => sum + service.total, 0);
+                return {
+                    businessName: $('businessName').value.trim() || 'Cleaning Business',
+                    businessPhone: $('businessPhone').value.trim(),
+                    businessAddress: $('businessAddress').value.trim(),
+                    businessEmail: $('businessEmail').value.trim(),
+                    website: $('website').value.trim(),
+                    quoteNo: $('quoteNo').value.trim() || '—',
+                    quoteDate: $('quoteDate').value,
+                    validUntil: $('validUntil').value,
+                    customerName: $('customerName').value.trim() || 'Customer name',
+                    customerPhone: $('customerPhone').value.trim(),
+                    customerEmail: $('customerEmail').value.trim(),
+                    propertyType: $('propertyType').value,
+                    propertyAddress: $('propertyAddress').value.trim(),
+                    propertySize: $('propertySize').value.trim(),
+                    bedrooms: $('bedrooms').value.trim(),
+                    services, subtotal, total: subtotal,
+                    terms: $('terms').value.trim(),
+                    notes: $('notes').value.trim()
+                };
+            }
+            function updatePreview() {
+                const d = collect();
+                $('pBusiness').textContent = d.businessName;
+                $('pBusinessInfo').textContent = [d.businessAddress, d.businessPhone, d.businessEmail, d.website].filter(Boolean).join('\n');
+                $('pQuoteMeta').textContent = `Quote #: ${d.quoteNo}\nDate: ${dateFmt(d.quoteDate)}`;
+                $('pCustomer').textContent = d.customerName;
+                $('pCustomerInfo').textContent = [d.customerPhone, d.customerEmail, d.propertyAddress].filter(Boolean).join('\n');
+                $('pValid').textContent = dateFmt(d.validUntil);
+                $('pPropertyMeta').textContent = [d.propertyType, d.propertySize, d.bedrooms].filter(Boolean).join('\n');
+                $('pServices').innerHTML = d.services.map(s => {
+                    s.card.querySelector('.service-line-total strong').textContent = money(s.total);
+                    const detail = [s.description, s.area ? `Area: ${s.area}` : ''].filter(Boolean).join('\n');
+                    return `<tr><td><div class="item-name">${escapeHtml(s.name || 'Cleaning service')}</div>${detail ? `<div class="item-description">${escapeHtml(detail)}</div>` : ''}</td><td>${s.qty} ${escapeHtml(s.unit)}</td><td>${money(s.price)}</td><td>${money(s.total)}</td></tr>`;
+                }).join('');
+                $('pTotal').textContent = money(d.total);
+                const scope = [];
+                if (d.notes) scope.push('NOTES\n' + d.notes);
+                $('pScope').textContent = scope.join('\n\n');
+                $('pTerms').textContent = d.terms || 'This quotation is an estimate. Final pricing may vary if the agreed scope or property condition changes. Work is scheduled after customer approval.';
+                $('pFooter').textContent = d.businessPhone ? `Questions? Contact ${d.businessName} · ${d.businessPhone}` : 'We look forward to helping you enjoy a cleaner space.';
+            }
+            function addPdfParagraph(doc, text, x, y, width, lineHeight = 4.5) {
+                if (!text) return y;
+                const lines = doc.splitTextToSize(String(text), width);
+                doc.text(lines, x, y);
+                return y + lines.length * lineHeight;
+            }
+            function validateQuotation() {
+                const d = collect();
+                const cards = [...$('servicesContainer').querySelectorAll('.service-card')];
+                const missing = [];
+                if (!d.businessName || d.businessName === 'Cleaning Business') missing.push('Business name');
+                if (!d.businessPhone) missing.push('Business phone');
+                if (!d.customerName || d.customerName === 'Customer name') missing.push('Customer name');
+                if (!d.quoteNo || d.quoteNo === '—') missing.push('Quotation number');
+                if (!cards.length) missing.push('At least one service');
+                cards.forEach((card, index) => {
+                    if (!card.querySelector('.s-name').value.trim()) missing.push(`Service ${index + 1} name`);
+                    if (card.querySelector('.s-price').value.trim() === '') missing.push(`Service ${index + 1} rate`);
+                });
+                if (missing.length) {
+                    $('status').textContent = 'Please complete required fields: ' + missing.join(', ') + '.';
+                    if (!d.businessName || d.businessName === 'Cleaning Business') $('businessName').focus();
+                    else if (!d.businessPhone) $('businessPhone').focus();
+                    else if (!d.customerName || d.customerName === 'Customer name') $('customerName').focus();
+                    else if (!d.quoteNo || d.quoteNo === '—') $('quoteNo').focus();
+                    else {
+                        const first = cards.find(card => !card.querySelector('.s-name').value.trim() || card.querySelector('.s-price').value.trim() === '');
+                        if (first) first.querySelector(!first.querySelector('.s-name').value.trim() ? '.s-name' : '.s-price').focus();
+                    }
+                    return false;
+                }
+                return true;
+            }
 
-      function downloadPDF() {
-        if (!validateQuotation()) return;
-        const d = collect();
-        if (!d.services.some(s => s.name || s.description || s.price > 0)) {
-          $('status').textContent = 'Please add at least one cleaning service before downloading.';
-          return;
-        }
-        if (!window.jspdf || !window.jspdf.jsPDF) {
-          $('status').textContent = 'PDF library could not load. Check your internet connection and reload this page.';
-          return;
-        }
-        const {jsPDF} = window.jspdf;
-        const doc = new jsPDF({unit: 'mm', format: 'a4'});
-        const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
-        const m = 16, right = W - m, width = W - 2 * m, blue = [104, 169, 232], ink = [23, 32, 51], muted = [92, 105, 129];
-        let y = 19;
-        doc.setFillColor(...blue); doc.rect(0, 0, W, 4, 'F');
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(21); doc.setTextColor(...blue);
-        doc.text('QUOTATION', right, y + 1, {align: 'right'});
-        doc.setFontSize(14); doc.setTextColor(...ink);
-        const businessLines = doc.splitTextToSize(d.businessName, width * .56);
-        doc.text(businessLines, m, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
-        let businessY = y + businessLines.length * 6;
-        [d.businessAddress, d.businessPhone, d.businessEmail, d.website].filter(Boolean).forEach(line => {businessY = addPdfParagraph(doc, line, m, businessY, width * .56, 4.3);});
-        doc.setFontSize(9); doc.text(`Quotation #: ${d.quoteNo}`, right, y + 10, {align: 'right'});
-        doc.text(`Date: ${dateFmt(d.quoteDate)}`, right, y + 16, {align: 'right'});
-        doc.text(`Valid until: ${dateFmt(d.validUntil)}`, right, y + 22, {align: 'right'});
-        y = Math.max(businessY, y + 29) + 7;
-        doc.setDrawColor(220, 228, 242); doc.line(m, y, right, y); y += 8;
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...blue); doc.text('PREPARED FOR', m, y);
-        doc.text('PROPERTY DETAILS', right, y, {align: 'right'}); y += 6;
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...ink);
-        const customerLines = doc.splitTextToSize(d.customerName, width * .52);
-        doc.text(customerLines, m, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
-        let customerY = y + customerLines.length * 4.5;
-        [d.customerPhone, d.customerEmail, d.propertyAddress].filter(Boolean).forEach(line => {customerY = addPdfParagraph(doc, line, m, customerY, width * .52, 4.2);});
-        const propertyLines = [d.propertyType, d.propertySize, d.bedrooms].filter(Boolean);
-        let propY = y;
-        propertyLines.forEach(line => {propY = addPdfParagraph(doc, line, right, propY, width * .40, 4.3);});
-        y = Math.max(customerY, propY) + 7;
-        y = addPdfParagraph(doc, 'Thank you for considering our cleaning services. Below is the proposed scope of work and pricing.', m, y, width, 4.5) + 5;
-        const rows = d.services.map(s => {
-          const desc = [s.name || 'Cleaning service', s.description, s.area ? `Area: ${s.area}` : ''].filter(Boolean).join('\n');
-          return [desc, `${s.qty} ${s.unit}`, money(s.price), money(s.total)];
-        });
-        if (typeof doc.autoTable === 'function') {
-          doc.autoTable({
-            startY: y, head: [['Service & details', 'Qty', 'Unit price', 'Amount']],
-            body: rows.length ? rows : [['Cleaning service', '0', money(0), money(0)]],
-            theme: 'striped', margin: {left: m, right: m},
-            styles: {font: 'helvetica', fontSize: 8.2, cellPadding: 3, overflow: 'linebreak', textColor: ink, lineColor: [228, 234, 244], lineWidth: .1},
-            headStyles: {fillColor: [225, 241, 255], textColor: [48, 105, 164], fontStyle: 'bold'},
-            alternateRowStyles: {fillColor: [246, 249, 255]},
-            columnStyles: {0: {cellWidth: 'auto'}, 1: {cellWidth: 27, halign: 'center'}, 2: {cellWidth: 34, halign: 'right'}, 3: {cellWidth: 34, halign: 'right'}},
-            didDrawPage: () => {doc.setFillColor(...blue); doc.rect(0, 0, W, 3, 'F');}
-          });
-          y = doc.lastAutoTable.finalY + 9;
-        } else {
-          rows.forEach(row => {y = addPdfParagraph(doc, row.join(' | '), m, y, width); y += 3;});
-          y += 5;
-        }
-        const ensureSpace = needed => {if (y + needed > H - 17) {doc.addPage(); y = 20;} };
-        const sumX = right - 75;
-        const sumRows = [['Total', money(d.total)]];
-        sumRows.forEach(([label, value]) => {ensureSpace(8); doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...muted); doc.text(label, sumX, y); doc.text(value, right, y, {align: 'right'}); y += 6.5;});
-        ensureSpace(14); doc.setDrawColor(...blue); doc.line(sumX, y - 2, right, y - 2); y += 4;
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(...blue); doc.text('TOTAL', sumX, y); doc.text(money(d.total), right, y, {align: 'right'}); y += 12;
-        const sections = [
-          ['ADDITIONAL NOTES', d.notes], ['TERMS & CONDITIONS', d.terms]
-        ].filter(pair => pair[1]);
-        sections.forEach(([label, content]) => {
-          const lines = doc.splitTextToSize(String(content), width);
-          ensureSpace(8 + lines.length * 4.2);
-          doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...blue); doc.text(label, m, y); y += 4.5;
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted); doc.text(lines, m, y); y += lines.length * 4.2 + 5;
-        });
-        ensureSpace(10); doc.setDrawColor(220, 228, 242); doc.line(m, y, right, y); y += 7;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
-        doc.text(d.businessPhone ? `Thank you! Contact ${d.businessName} at ${d.businessPhone}.` : 'Thank you for considering our services.', W / 2, y, {align: 'center'});
-        const safe = (d.quoteNo || 'quotation').replace(/[^a-z0-9\_-]/gi, '\_').slice(0, 60);
-        doc.save(`${safe || 'quotation'}.pdf`);
-        $('status').textContent = 'Your quotation PDF download has started.';
-      }
-      $('addServiceBtn').addEventListener('click', () => addService());
-      $('pdfBtn').addEventListener('click', downloadPDF);
-      $('printBtn').addEventListener('click', () => {if (validateQuotation()) window.print();});
-      ['businessName', 'businessPhone', 'businessAddress', 'businessEmail', 'website', 'quoteNo', 'quoteDate', 'validUntil', 'customerName', 'customerPhone', 'customerEmail', 'propertyType', 'propertyAddress', 'propertySize', 'bedrooms', 'terms', 'notes'].forEach(id => {
-        $(id).addEventListener('input', updatePreview);
-        $(id).addEventListener('change', updatePreview);
-      });
-      addService();
-    })();
-  </script>
+            function downloadPDF() {
+                if (!validateQuotation()) return;
+                const d = collect();
+                if (!d.services.some(s => s.name || s.description || s.price > 0)) {
+                    $('status').textContent = 'Please add at least one cleaning service before downloading.';
+                    return;
+                }
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    $('status').textContent = 'PDF library could not load. Check your internet connection and reload this page.';
+                    return;
+                }
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+                const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+                const m = 16, right = W - m, width = W - 2 * m, blue = [104, 169, 232], ink = [23, 32, 51], muted = [92, 105, 129];
+                let y = 19;
+                doc.setFillColor(...blue); doc.rect(0, 0, W, 4, 'F');
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(21); doc.setTextColor(...blue);
+                doc.text('QUOTATION', right, y + 1, { align: 'right' });
+                doc.setFontSize(14); doc.setTextColor(...ink);
+                const businessLines = doc.splitTextToSize(d.businessName, width * .56);
+                doc.text(businessLines, m, y);
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
+                let businessY = y + businessLines.length * 6;
+                [d.businessAddress, d.businessPhone, d.businessEmail, d.website].filter(Boolean).forEach(line => { businessY = addPdfParagraph(doc, line, m, businessY, width * .56, 4.3); });
+                doc.setFontSize(9); doc.text(`Quotation #: ${d.quoteNo}`, right, y + 10, { align: 'right' });
+                doc.text(`Date: ${dateFmt(d.quoteDate)}`, right, y + 16, { align: 'right' });
+                doc.text(`Valid until: ${dateFmt(d.validUntil)}`, right, y + 22, { align: 'right' });
+                y = Math.max(businessY, y + 29) + 7;
+                doc.setDrawColor(220, 228, 242); doc.line(m, y, right, y); y += 8;
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...blue); doc.text('PREPARED FOR', m, y);
+                doc.text('PROPERTY DETAILS', right, y, { align: 'right' }); y += 6;
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...ink);
+                const customerLines = doc.splitTextToSize(d.customerName, width * .52);
+                doc.text(customerLines, m, y);
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
+                let customerY = y + customerLines.length * 4.5;
+                [d.customerPhone, d.customerEmail, d.propertyAddress].filter(Boolean).forEach(line => { customerY = addPdfParagraph(doc, line, m, customerY, width * .52, 4.2); });
+                const propertyLines = [d.propertyType, d.propertySize, d.bedrooms].filter(Boolean);
+                let propY = y;
+                propertyLines.forEach(line => { propY = addPdfParagraph(doc, line, right, propY, width * .40, 4.3); });
+                y = Math.max(customerY, propY) + 7;
+                y = addPdfParagraph(doc, 'Thank you for considering our cleaning services. Below is the proposed scope of work and pricing.', m, y, width, 4.5) + 5;
+                const rows = d.services.map(s => {
+                    const desc = [s.name || 'Cleaning service', s.description, s.area ? `Area: ${s.area}` : ''].filter(Boolean).join('\n');
+                    return [desc, `${s.qty} ${s.unit}`, money(s.price), money(s.total)];
+                });
+                if (typeof doc.autoTable === 'function') {
+                    doc.autoTable({
+                        startY: y, head: [['Service & details', 'Qty', 'Unit price', 'Amount']],
+                        body: rows.length ? rows : [['Cleaning service', '0', money(0), money(0)]],
+                        theme: 'striped', margin: { left: m, right: m },
+                        styles: { font: 'helvetica', fontSize: 8.2, cellPadding: 3, overflow: 'linebreak', textColor: ink, lineColor: [228, 234, 244], lineWidth: .1 },
+                        headStyles: { fillColor: [225, 241, 255], textColor: [48, 105, 164], fontStyle: 'bold' },
+                        alternateRowStyles: { fillColor: [246, 249, 255] },
+                        columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 27, halign: 'center' }, 2: { cellWidth: 34, halign: 'right' }, 3: { cellWidth: 34, halign: 'right' } },
+                        didDrawPage: () => { doc.setFillColor(...blue); doc.rect(0, 0, W, 3, 'F'); }
+                    });
+                    y = doc.lastAutoTable.finalY + 9;
+                } else {
+                    rows.forEach(row => { y = addPdfParagraph(doc, row.join(' | '), m, y, width); y += 3; });
+                    y += 5;
+                }
+                const ensureSpace = needed => { if (y + needed > H - 17) { doc.addPage(); y = 20; } };
+                const sumX = right - 75;
+                const sumRows = [['Total', money(d.total)]];
+                sumRows.forEach(([label, value]) => { ensureSpace(8); doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...muted); doc.text(label, sumX, y); doc.text(value, right, y, { align: 'right' }); y += 6.5; });
+                ensureSpace(14); doc.setDrawColor(...blue); doc.line(sumX, y - 2, right, y - 2); y += 4;
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(...blue); doc.text('TOTAL', sumX, y); doc.text(money(d.total), right, y, { align: 'right' }); y += 12;
+                const sections = [
+                    ['ADDITIONAL NOTES', d.notes], ['TERMS & CONDITIONS', d.terms]
+                ].filter(pair => pair[1]);
+                sections.forEach(([label, content]) => {
+                    const lines = doc.splitTextToSize(String(content), width);
+                    ensureSpace(8 + lines.length * 4.2);
+                    doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...blue); doc.text(label, m, y); y += 4.5;
+                    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted); doc.text(lines, m, y); y += lines.length * 4.2 + 5;
+                });
+                ensureSpace(10); doc.setDrawColor(220, 228, 242); doc.line(m, y, right, y); y += 7;
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
+                doc.text(d.businessPhone ? `Thank you! Contact ${d.businessName} at ${d.businessPhone}.` : 'Thank you for considering our services.', W / 2, y, { align: 'center' });
+                const safe = (d.quoteNo || 'quotation').replace(/[^a-z0-9\_-]/gi, '\_').slice(0, 60);
+                doc.save(`QT # ${safe || 'quotation'}.pdf`);
+                $('status').textContent = 'Your quotation PDF download has started.';
+            }
+            $('addServiceBtn').addEventListener('click', () => addService());
+            $('pdfBtn').addEventListener('click', downloadPDF);
+            $('printBtn').addEventListener('click', () => { if (validateQuotation()) window.print(); });
+            ['businessName', 'businessPhone', 'businessAddress', 'businessEmail', 'website', 'quoteNo', 'quoteDate', 'validUntil', 'customerName', 'customerPhone', 'customerEmail', 'propertyType', 'propertyAddress', 'propertySize', 'bedrooms', 'terms', 'notes'].forEach(id => {
+                $(id).addEventListener('input', updatePreview);
+                $(id).addEventListener('change', updatePreview);
+            });
+            addService();
+        })();
+    </script>
 </body>
 
 </html>
